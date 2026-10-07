@@ -4,6 +4,8 @@ import MenuScene from './scenes/MenuScene.js';
 import IntroScene from './scenes/IntroScene.js';
 import GameScene from './scenes/GameScene.js';
 import PuzzleScene from './scenes/PuzzleScene.js';
+import EvidenceBoardScene from './scenes/EvidenceBoardScene.js';
+import FinalChoiceScene from './scenes/FinalChoiceScene.js';
 import FinalScene from './scenes/FinalScene.js';
 
 const config = {
@@ -23,7 +25,7 @@ const config = {
       debug: false,
     },
   },
-  scene: [BootScene, MenuScene, IntroScene, GameScene, PuzzleScene, FinalScene],
+  scene: [BootScene, MenuScene, IntroScene, GameScene, PuzzleScene, EvidenceBoardScene, FinalChoiceScene, FinalScene],
 };
 
 const game = new Phaser.Game(config);

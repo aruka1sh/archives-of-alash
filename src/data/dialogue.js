@@ -1,188 +1,132 @@
 export const DIALOGUE = {
   elder: {
     greeting: [
-      {
-        speaker: 'Village Elder',
-        text: 'Ah, young scholar! Welcome. You have arrived at an important time.'
-      },
-      {
-        speaker: 'Village Elder',
-        text: 'The writings of Abai have traveled across the steppe, inspiring minds young and old. But time and weather take their toll on paper.'
-      },
-      {
-        speaker: 'Village Elder',
-        text: 'Some pages from an important manuscript have been scattered around our village. Will you help us recover them?'
-      }
+      { speaker: 'Village Elder', text: 'Welcome, young scholar. You have arrived at an important time.' },
+      { speaker: 'Village Elder', text: 'The writings of Abai have traveled across the steppe, but some pages have been lost. Will you help us recover them?' }
     ],
     questHint: [
-      {
-        speaker: 'Village Elder',
-        text: 'Search carefully. The manuscript fragments could be anywhere — near the trees, by the houses, or around the village square. Keep your eyes open.'
-      }
+      { speaker: 'Village Elder', text: 'Search carefully — near trees, houses, and around the village square. The fragments could be anywhere.' }
     ],
-    quest2Intro: [
-      {
-        speaker: 'Village Elder',
-        text: 'You found all the fragments! Excellent work, young scholar. Your dedication reminds me of why our ancestors valued knowledge so highly.'
-      },
-      {
-        speaker: 'Village Elder',
-        text: 'Now, let me ask you something. Not every question has a simple answer — but wisdom begins with reflection.'
-      },
-      {
-        speaker: 'Village Elder',
-        text: 'Two young villagers argue about whether education is truly necessary for their future. One says books have no place on the steppe. The other believes learning opens every door.'
-      },
-      {
-        speaker: 'Village Elder',
-        text: 'What do you think, young scholar? Which perspective aligns with the wisdom of Abai?'
-      }
+    chapter1_ask: [
+      { speaker: 'Village Elder', text: 'You found the pages? But one is missing... that is troubling.' },
+      { speaker: 'Village Elder', text: 'I remember something. At sunset yesterday, I saw a figure near the archive. I thought nothing of it at the time.' }
     ],
-    correctAnswer: [
-      {
-        speaker: 'Village Elder',
-        text: 'Well said! Abai valued education above almost everything else. He believed that knowledge was the light that could guide our people toward a brighter future.'
-      },
-      {
-        speaker: 'Village Elder',
-        text: '"A man\"s character is revealed by his thoughts, his thoughts by his words, and his words by his actions." These are Abai\"s own words.'
-      },
-      {
-        speaker: 'Village Elder',
-        text: 'You have earned 10 Heritage Points. Now, the archivist at the archive building needs your help with one final task.'
-      }
+    chapter2_interview: {
+      intro: [
+        { speaker: 'Village Elder', text: 'Ask your questions, young scholar. I will tell you what I can.' }
+      ],
+      choices: [
+        { id: 'elder_ask_all', text: '"Tell me everything you saw."', trust: 5, reply: [
+          { speaker: 'Village Elder', text: 'I was walking back from the well at sunset. A figure in a long coat entered the archive. They were carrying something — papers, perhaps.' },
+          { speaker: 'Village Elder', text: 'I did not see their face. But they moved with purpose, not like a thief.' }
+        ]},
+        { id: 'elder_ask_access', text: '"Who had access to the archive?"', trust: 5, reply: [
+          { speaker: 'Village Elder', text: 'Only a few people. The Archivist, of course. The Teacher sometimes helps catalogue materials. And I have an old key, though I rarely use it.' },
+          { speaker: 'Village Elder', text: 'But anyone determined could find a way in. These buildings are not fortresses.' }
+        ]},
+        { id: 'elder_ask_trust', text: '"Why should I believe you?"', trust: -10, reply: [
+          { speaker: 'Village Elder', text: 'I have lived in this village for sixty years. I have nothing to hide — but I understand your caution.' },
+          { speaker: 'Village Elder', text: 'In times like these, trust is a fragile thing. I do not blame you for doubting.' }
+        ]}
+      ]
+    },
+    chapter4_start: [
+      { speaker: 'Village Elder', text: 'You have gathered much evidence. But there is one place you have not searched — the archive at night.' },
+      { speaker: 'Village Elder', text: 'Wait until evening. Go to the archive. I believe you will find what you are looking for.' }
     ],
-    wrongAnswer: [
-      {
-        speaker: 'Village Elder',
-        text: 'That does not reflect the spirit of Abai\"s teachings, young scholar. Abai believed deeply in the transformative power of education — for everyone, not just the wealthy.'
-      },
-      {
-        speaker: 'Village Elder',
-        text: 'He spent his life learning and writing, encouraging others to seek knowledge wherever it could be found. Let us try again.'
-      }
-    ],
-    questComplete: [
-      {
-        speaker: 'Village Elder',
-        text: 'You have done a great service today. The archive is whole again, and the words of Abai will continue to inspire generations to come.'
-      },
-      {
-        speaker: 'Village Elder',
-        text: 'A nation that forgets its poets and thinkers forgets itself. You have helped ensure that does not happen here.'
-      }
+    chapter5_start: [
+      { speaker: 'Village Elder', text: 'Now you understand. The manuscript was hidden — not stolen. Someone was trying to protect Abai\'s words from those who would destroy them.' },
+      { speaker: 'Village Elder', text: 'But now you must decide. What you do next will determine the fate of these pages.' }
     ]
   },
 
   teacher: {
     greeting: [
-      {
-        speaker: 'Teacher',
-        text: 'Greetings! I teach the children of this village. It is humble work, but Abai himself believed that a teacher shapes the future of an entire nation.'
-      },
-      {
-        speaker: 'Teacher',
-        text: 'The Alash movement — have you heard of it? Our intellectuals dreamed of a modern, educated Kazakhstan. They built schools, wrote books, and published newspapers.'
-      },
-      {
-        speaker: 'Teacher',
-        text: 'Education and cultural development were at the heart of everything they did. Without knowledge, there can be no true progress.'
-      }
+      { speaker: 'Teacher', text: 'Greetings! I teach the children here. It is humble work, but Abai believed a teacher shapes the future of a nation.' },
+      { speaker: 'Teacher', text: 'The Alash movement — education, culture, national identity. These ideas live in every page we preserve.' }
     ],
     questHint: [
-      {
-        speaker: 'Teacher',
-        text: 'I saw something glinting near the trees yesterday. It might have been one of the missing manuscript fragments.'
-      },
-      {
-        speaker: 'Teacher',
-        text: 'Check around the village square as well — many people pass through there. A fragment could have been dropped by anyone.'
-      }
+      { speaker: 'Teacher', text: 'I saw something glinting near the trees yesterday. And near the village square — many people pass through. Check everywhere.' }
     ],
-    wisdom: [
-      {
-        speaker: 'Teacher',
-        text: 'Abai\"s philosophy teaches us that a person must develop both their mind and their character. Knowledge without morality is like a lamp without oil.'
-      },
-      {
-        speaker: 'Teacher',
-        text: 'The Alash leaders — Alikhan Bokeikhanov, Akhmet Baitursynov, Mirjaqip Dulatov — they all believed that education was the foundation of national identity.'
-      }
+    chapter1_ask: [
+      { speaker: 'Teacher', text: 'A missing page? That is... concerning. I thought I heard something last night.' },
+      { speaker: 'Teacher', text: 'An argument, I think. Near the archive. Two voices. I could not make out the words.' }
+    ],
+    chapter2_interview: {
+      intro: [
+        { speaker: 'Teacher', text: 'I want to help. Ask me anything.' }
+      ],
+      choices: [
+        { id: 'teacher_ask_all', text: '"Tell me what you heard."', trust: 5, reply: [
+          { speaker: 'Teacher', text: 'It was after dark. Two people arguing. One voice was older, calmer. The other was agitated. I heard the word "manuscript" clearly.' },
+          { speaker: 'Teacher', text: 'I was afraid to go closer. I regret that now.' }
+        ]},
+        { id: 'teacher_ask_access', text: '"Who would want to harm the manuscript?"', trust: 5, reply: [
+          { speaker: 'Teacher', text: 'Not harm — protect. There has been talk of outsiders who want to confiscate our writings. Some say we should hide everything.' },
+          { speaker: 'Teacher', text: 'The Archivist has been especially worried. He barely sleeps.' }
+        ]},
+        { id: 'teacher_ask_trust', text: '"Why are you so nervous?"', trust: -5, reply: [
+          { speaker: 'Teacher', text: 'I... I am not nervous. I am concerned. There is a difference.' },
+          { speaker: 'Teacher', text: 'But yes, I am afraid. If the authorities find out we are hiding materials, the school could be closed.' }
+        ]}
+      ]
+    },
+    chapter3_start: [
+      { speaker: 'Teacher', text: 'Look around the village carefully. There may be evidence others have overlooked. Check near the archive, the well, the old cart.' },
+      { speaker: 'Teacher', text: 'And if you find anything in writing — bring it to me. Handwriting can tell us much.' }
     ]
   },
 
   archivist: {
     greeting: [
-      {
-        speaker: 'Archivist',
-        text: 'Shh... not too loud! These shelves hold some of the most precious writings in the region. Copies of Abai\"s poetry, Alash newspaper articles, historical records...'
-      },
-      {
-        speaker: 'Archivist',
-        text: 'I have dedicated my life to preserving these documents. Paper is fragile — a single spark, a little water, and an entire world of knowledge can disappear.'
-      },
-      {
-        speaker: 'Archivist',
-        text: 'If you find any manuscript fragments, please bring them to me. I can help restore them to their proper place.'
-      }
+      { speaker: 'Archivist', text: 'Welcome to the archive. These shelves hold some of the most precious writings in the region.' },
+      { speaker: 'Archivist', text: 'Paper is fragile. A spark, a little water — and an entire world of knowledge can disappear. I protect what I can.' }
     ],
     questHint: [
-      {
-        speaker: 'Archivist',
-        text: 'The fragments you\"re looking for — they would be small pieces of aged paper. Look for something that seems out of place. Near buildings, under trees...'
-      },
-      {
-        speaker: 'Archivist',
-        text: 'When you find them all, return to me. There is a special task I need help with — restoring the archive catalog.'
-      }
+      { speaker: 'Archivist', text: 'The missing pages are small pieces of aged paper. Look near buildings, under trees. When you find them, return to me.' }
     ],
-    puzzleIntro: [
-      {
-        speaker: 'Archivist',
-        text: 'You found all three fragments! Now, before I can properly file them, I need to organize our reference system.'
-      },
-      {
-        speaker: 'Archivist',
-        text: 'Can you help me match the key concepts with their descriptions? This will ensure everything is catalogued correctly.'
-      },
-      {
-        speaker: 'Archivist',
-        text: 'Let me open the reference cards for you. Match each concept on the left with its correct description on the right.'
-      }
+    chapter1_start: [
+      { speaker: 'Archivist', text: 'The manuscript is incomplete. Two pages remain... but the final page is gone. Not lost — removed.' },
+      { speaker: 'Archivist', text: 'Look at the binding. The tear is fresh. Someone did this deliberately. Find the other pages first — then we will investigate.' }
     ],
-    puzzleDone: [
-      {
-        speaker: 'Archivist',
-        text: 'Perfect! The catalog is now in order. The fragments have been restored to their rightful place in the archive.'
-      },
-      {
-        speaker: 'Archivist',
-        text: 'You have earned 20 Heritage Points for your careful work. Go speak with the elder — I believe he has something to tell you.'
-      }
+    chapter1_missing: [
+      { speaker: 'Archivist', text: 'The third page... it is not here. Instead, you find a torn corner. Someone removed this page recently.' },
+      { speaker: 'Archivist', text: 'This is no accident. We must find out what happened. Speak with the others. Someone knows something.' }
+    ],
+    chapter2_start: [
+      { speaker: 'Archivist', text: 'You want to ask about the missing page? Fine. But I have already told you — I know nothing.' },
+      { speaker: 'Archivist', text: 'Or rather... I know nothing I can share. Some things are better left unsaid.' }
+    ],
+    chapter2_interview: {
+      intro: [
+        { speaker: 'Archivist', text: 'Make it quick. I have work to do.' }
+      ],
+      choices: [
+        { id: 'arch_ask_all', text: '"Tell me what really happened."', trust: -5, reply: [
+          { speaker: 'Archivist', text: 'I told you — nobody entered the archive. The seal was intact. The pages were all accounted for. Until they were not.' },
+          { speaker: 'Archivist', text: 'But... the seal. I checked it this morning and it was... fine. I am certain of it.' }
+        ]},
+        { id: 'arch_ask_access', text: '"The seal was broken. You know that."', trust: 10, reply: [
+          { speaker: 'Archivist', text: '...You noticed. Yes. The seal was broken. I did not want to admit it.' },
+          { speaker: 'Archivist', text: 'I feared that if people knew, they would panic. Or worse — come looking for other materials to destroy.' }
+        ]},
+        { id: 'arch_ask_trust', text: '"You are hiding something."', trust: -10, reply: [
+          { speaker: 'Archivist', text: 'Perhaps I am. And perhaps I have good reason. Not every truth is safe to speak aloud.' },
+          { speaker: 'Archivist', text: 'But if you truly care about preserving these words, you will understand.' }
+        ]}
+      ]
+    },
+    chapter4_archive: [
+      { speaker: 'Archivist', text: 'You came back. Good. There is something I need to show you.' },
+      { speaker: 'Archivist', text: 'I found this letter hidden behind a loose brick. It was meant for me — but I never received it.' },
+      { speaker: 'Archivist', text: '"The manuscript must not fall into the wrong hands." Someone was trying to warn me. Someone was trying to help.' }
     ]
   }
 };
 
-export const QUEST2_CHOICES = {
-  question: 'Two young villagers argue about whether education is truly necessary for their future. What do you believe?',
-  options: [
-    {
-      id: 'A',
-      text: 'Knowledge helps a person understand the world and improve it.',
-      correct: true,
-      feedback: 'Correct! Abai strongly valued knowledge, education, and personal development. He believed learning was essential for both individual growth and the progress of society.'
-    },
-    {
-      id: 'B',
-      text: 'Education is only useful for wealthy people.',
-      correct: false,
-      feedback: 'Abai believed education should be for everyone, not just the wealthy. He saw knowledge as the key to lifting up the entire community, regardless of status.'
-    },
-    {
-      id: 'C',
-      text: 'Young people should accept tradition without questioning it.',
-      correct: false,
-      feedback: 'Abai encouraged critical thinking and reflection. He believed that tradition should be understood and built upon — not blindly followed without thought.'
-    }
-  ]
+// Investigation choices for each NPC in Chapter 2
+export const INTERVIEW_CHOICES = {
+  elder: DIALOGUE.elder.chapter2_interview,
+  teacher: DIALOGUE.teacher.chapter2_interview,
+  archivist: DIALOGUE.archivist.chapter2_interview
 };

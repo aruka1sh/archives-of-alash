@@ -10,109 +10,145 @@ export default class IntroScene extends Phaser.Scene {
     const w = this.cameras.main.width;
     const h = this.cameras.main.height;
 
-    this.add.rectangle(w / 2, h / 2, w, h, 0x1a0a00);
+    this.createBackground(w, h);
 
-    const lines = [
-      '',
+    // "◆ 1910 ◆" at top
+    this.add.text(w / 2, 26, '◆  1910  ◆', {
+      fontFamily: 'Cinzel, Georgia, serif',
+      fontSize: '13px',
+      color: '#C4A46C',
+      letterSpacing: 6,
+    }).setOrigin(0.5).setAlpha(0.6);
+
+    // Story text — static, no typewriter, always visible
+    const storyLines = [
       'Semey, early 20th century.',
       '',
-      'The ideas and writings of Abai Kunanbaiuly',
-      'have inspired a generation of Kazakh intellectuals.',
+      'The writings of Abai Kunanbaiuly',
+      'have inspired a generation',
+      'of Kazakh intellectuals.',
       '',
-      'The Alash movement dreams of a modern,',
-      'educated nation — proud of its heritage',
-      'and reaching toward the future.',
+      'The Alash movement dreams',
+      'of a modern, educated nation.',
       '',
-      'But paper is fragile.',
-      'Handwritten manuscripts can easily be lost',
-      'to time, weather, and neglect.',
+      'But handwritten manuscripts',
+      'can easily be lost to time.',
       '',
-      'You are a young scholar.',
-      'You have been asked to help preserve',
-      'an important manuscript',
-      'before it disappears forever.',
-      ''
+      'You are a young scholar tasked',
+      'with preserving an important',
+      'manuscript before it disappears.',
     ];
 
-    const storyText = this.add.text(w / 2, h / 2 - 30, '', {
+    this.add.text(w / 2, 100, storyLines.join('\n'), {
       fontFamily: 'Lora, Georgia, serif',
       fontSize: '17px',
       color: '#D4C5A9',
       lineSpacing: 6,
       align: 'center',
-    }).setOrigin(0.5).setAlpha(0);
+      wordWrap: { width: 520 },
+    }).setOrigin(0.5, 0);
 
-    let charIndex = 0;
-    const fullText = lines.join('\n');
-    const displayText = [];
-
-    this.typewriterTimeline = this.time.addEvent({
-      delay: 25,
-      callback: () => {
-        displayText.push(fullText[charIndex]);
-        storyText.setText(displayText.join(''));
-        charIndex++;
-
-        if (charIndex >= fullText.length) {
-          this.typewriterTimeline.destroy();
-          this.showBeginButton(w, h);
-        }
-      },
-      repeat: fullText.length - 1,
+    // Show the button after a short delay
+    this.time.delayedCall(600, () => {
+      this.showBeginButton(w, h);
     });
+  }
 
-    this.tweens.add({
-      targets: storyText,
-      alpha: 1,
-      duration: 400,
-    });
+  createBackground(w, h) {
+    const bg = this.add.graphics();
+    bg.fillStyle(0x120808);
+    bg.fillRect(0, 0, w, h);
+
+    // Warm central glow
+    bg.fillStyle(0x2A1506, 0.3);
+    bg.fillCircle(w / 2, h * 0.45, 280);
+
+    // Subtle vertical lines
+    bg.lineStyle(1, 0xC4A46C, 0.06);
+    bg.lineBetween(w * 0.12, 0, w * 0.12, h);
+    bg.lineBetween(w * 0.88, 0, w * 0.88, h);
   }
 
   showBeginButton(w, h) {
     const btnW = 260;
-    const btnH = 50;
+    const btnH = 52;
     const btnX = w / 2;
-    const btnY = h * 0.78;
+    const btnY = h - 90;
 
+    // Decorative line
+    const divG = this.add.graphics();
+    divG.lineStyle(1, 0xC4A46C, 0.25);
+    divG.lineBetween(w / 2 - 80, btnY - 30, w / 2 + 80, btnY - 30);
+    divG.fillStyle(0xC4A46C, 0.35);
+    divG.fillCircle(w / 2, btnY - 30, 2);
+
+    // Button background
     const bg = this.add.graphics();
-    bg.fillStyle(0x3D2B1A, 0.9);
+    bg.fillStyle(0x3D2B1A, 0.92);
     bg.fillRoundedRect(btnX - btnW / 2, btnY - btnH / 2, btnW, btnH, 8);
-    bg.lineStyle(2, 0xC4A46C, 0.8);
+    bg.lineStyle(1.5, 0x8B7355, 0.7);
     bg.strokeRoundedRect(btnX - btnW / 2, btnY - btnH / 2, btnW, btnH, 8);
 
-    const text = this.add.text(btnX, btnY, 'BEGIN THE QUEST', {
+    // Inner line
+    bg.lineStyle(1, 0xC4A46C, 0.25);
+    bg.strokeRoundedRect(btnX - btnW / 2 + 3, btnY - btnH / 2 + 3, btnW - 6, btnH - 6, 6);
+
+    // Corner accent dots
+    const dots = this.add.graphics();
+    dots.fillStyle(0xC4A46C, 0.5);
+    dots.fillCircle(btnX - btnW / 2 + 12, btnY, 4);
+    dots.fillCircle(btnX + btnW / 2 - 12, btnY, 4);
+
+    // Button label
+    const label = this.add.text(btnX, btnY, 'BEGIN THE QUEST', {
       fontFamily: 'Cinzel, Georgia, serif',
-      fontSize: '20px',
+      fontSize: '18px',
       color: '#E8D5B0',
+      letterSpacing: 3,
     }).setOrigin(0.5);
 
-    bg.setAlpha(0);
-    text.setAlpha(0);
+    // CLICKABLE HIT AREA — this is the key part
+    const hitArea = this.add.rectangle(btnX, btnY, btnW, btnH, 0x3D2B1A, 0.01)
+      .setInteractive({ useHandCursor: true })
+      .setDepth(10);
 
-    const hitArea = this.add.rectangle(btnX, btnY, btnW, btnH, 0x000000, 0)
-      .setInteractive({ useHandCursor: true });
-
-    this.tweens.add({
-      targets: [bg, text],
-      alpha: 1,
-      duration: 600,
-      ease: 'Cubic.easeOut',
-      delay: 300,
-    });
-
+    // Hover effects
     hitArea.on('pointerover', () => {
-      text.setColor('#FFE8C0');
-      text.setScale(1.03);
+      bg.clear();
+      bg.fillStyle(0x5C3A1E, 0.95);
+      bg.fillRoundedRect(btnX - btnW / 2, btnY - btnH / 2, btnW, btnH, 8);
+      bg.lineStyle(2, 0xC4A46C, 0.9);
+      bg.strokeRoundedRect(btnX - btnW / 2, btnY - btnH / 2, btnW, btnH, 8);
+      label.setColor('#FFE8C0');
     });
+
     hitArea.on('pointerout', () => {
-      text.setColor('#E8D5B0');
-      text.setScale(1);
+      bg.clear();
+      bg.fillStyle(0x3D2B1A, 0.92);
+      bg.fillRoundedRect(btnX - btnW / 2, btnY - btnH / 2, btnW, btnH, 8);
+      bg.lineStyle(1.5, 0x8B7355, 0.7);
+      bg.strokeRoundedRect(btnX - btnW / 2, btnY - btnH / 2, btnW, btnH, 8);
+      bg.lineStyle(1, 0xC4A46C, 0.25);
+      bg.strokeRoundedRect(btnX - btnW / 2 + 3, btnY - btnH / 2 + 3, btnW - 6, btnH - 6, 6);
+      label.setColor('#E8D5B0');
     });
+
+    // THE ACTUAL CLICK HANDLER
     hitArea.on('pointerdown', () => {
       this.cameras.main.fadeOut(600, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => {
         this.scene.start('GameScene');
       });
+    });
+
+    // Subtle pulse
+    this.tweens.add({
+      targets: label,
+      alpha: { from: 1, to: 0.75 },
+      duration: 1500,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
     });
   }
 }

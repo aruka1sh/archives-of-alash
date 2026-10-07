@@ -11,37 +11,7 @@ html, body {
   background-color: #0d0d0d;
 }
 
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Lora', Georgia, serif;
-}
-
 #game-container {
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#game-container canvas {
-  display: block;
-  image-rendering: auto;
-}
-
-/* Custom scrollbar for any overlays */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #1a0a00;
-}
-::-webkit-scrollbar-thumb {
-  background: #8B7355;
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #C4A46C;
 }

@@ -7,13 +7,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
 
     this.setCollideWorldBounds(true);
-    this.setSize(20, 20);
-    this.setOffset(6, 6);
+    this.setSize(22, 22);
+    this.setOffset(13, 18);
     this.setDepth(10);
 
-    this.speed = 180;
+    this.speed = 175;
     this.direction = 'down';
     this.moving = false;
+
+    // Shadow beneath player
+    this.shadow = scene.add.image(x, y + 4, 'shadow').setDepth(9).setAlpha(0.6).setScale(0.9);
+    this.shadow.setTint(0x000000);
   }
 
   update(cursors, wasd) {
@@ -49,17 +53,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.setVelocity(vx * this.speed, vy * this.speed);
 
+    // Walking bob
     if (this.moving) {
-      this.updateAnimation();
+      this.shadow.y = this.y + 2 + Math.sin(this.scene.time.now * 0.01) * 1;
+      this.y += Math.sin(this.scene.time.now * 0.012) * 0.3;
     } else {
-      this.setFrame(0);
+      this.shadow.y = this.y + 2;
     }
-  }
 
-  updateAnimation() {
-    const dirFrame = { up: 3, down: 0, left: 1, right: 2 };
-    const base = dirFrame[this.direction] || 0;
-    const frame = this.scene.time.now % 400 < 200 ? base : base;
-    this.setFrame(frame);
+    this.shadow.x = this.x;
+
+    // Directional flip
+    if (this.direction === 'left') {
+      this.setFlipX(true);
+    } else if (this.direction === 'right') {
+      this.setFlipX(false);
+    }
   }
 }
