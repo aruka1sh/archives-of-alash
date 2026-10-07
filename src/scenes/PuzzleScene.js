@@ -526,6 +526,9 @@ export default class PuzzleScene extends Phaser.Scene {
       this.cameras.main.once('camerafadeoutcomplete', () => {
         this.scene.stop();
         if (this.gameScene) {
+          if (this.gameScene.chapterManager) {
+            this.gameScene.chapterManager.solvePuzzle();
+          }
           this.gameScene.scene.resume();
           this.gameScene.updateAllUI();
           this.gameScene.updatePointsDisplay();
@@ -546,7 +549,7 @@ export default class PuzzleScene extends Phaser.Scene {
 
     backBtn.on('pointerover', () => backBtn.setColor('#FFE8C0'));
     backBtn.on('pointerout', () => backBtn.setColor('#8B7355'));
-    backBtn.on('pointerdown', () => {
+    const exitPuzzle = () => {
       this.cameras.main.fadeOut(300, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => {
         this.scene.stop();
@@ -554,6 +557,9 @@ export default class PuzzleScene extends Phaser.Scene {
           this.gameScene.scene.resume();
         }
       });
-    });
+    };
+
+    backBtn.on('pointerdown', exitPuzzle);
+    this.input.keyboard.on('keydown-ESC', exitPuzzle);
   }
 }

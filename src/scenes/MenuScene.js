@@ -228,38 +228,64 @@ export default class MenuScene extends Phaser.Scene {
   }
 
   createMenuButtons(w, h) {
-    const btnY1 = h * 0.62;
-    const btnY2 = h * 0.72;
+    let hasSave = false;
+    try {
+      const raw = localStorage.getItem('archives_of_alash_save');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        hasSave = !!parsed.activeChapterId;
+      }
+    } catch (e) {
+      hasSave = false;
+    }
     const btnW = 260;
-    const btnH = 52;
+    const btnH = 50;
 
-    const startBtnGroup = this.createParchmentButton(w / 2, btnY1, btnW, btnH, 'START GAME', () => {
-      this.transitionTo('IntroScene');
-    });
+    let groups = [];
 
-    const howBtnGroup = this.createParchmentButton(w / 2, btnY2, btnW, btnH, 'HOW TO PLAY', () => {
-      this.showHowToPlay(w, h);
-    });
+    if (hasSave) {
+      const btnY1 = h * 0.58;
+      const btnY2 = h * 0.67;
+      const btnY3 = h * 0.76;
 
-    // Fade in (skip hitArea — keep it always interactive)
-    [startBtnGroup, howBtnGroup].forEach(group => {
+      const continueBtn = this.createParchmentButton(w / 2, btnY1, btnW, btnH, 'CONTINUE', () => {
+        this.transitionTo('GameScene');
+      });
+
+      const newGameBtn = this.createParchmentButton(w / 2, btnY2, btnW, btnH, 'NEW GAME', () => {
+        localStorage.removeItem('archives_of_alash_save');
+        this.transitionTo('IntroScene');
+      });
+
+      const howBtn = this.createParchmentButton(w / 2, btnY3, btnW, btnH, 'HOW TO PLAY', () => {
+        this.showHowToPlay(w, h);
+      });
+
+      groups = [continueBtn, newGameBtn, howBtn];
+    } else {
+      const btnY1 = h * 0.62;
+      const btnY2 = h * 0.72;
+
+      const startBtn = this.createParchmentButton(w / 2, btnY1, btnW, btnH, 'START GAME', () => {
+        this.transitionTo('IntroScene');
+      });
+
+      const howBtn = this.createParchmentButton(w / 2, btnY2, btnW, btnH, 'HOW TO PLAY', () => {
+        this.showHowToPlay(w, h);
+      });
+
+      groups = [startBtn, howBtn];
+    }
+
+    groups.forEach((group, idx) => {
       group.visuals.forEach(item => item.setAlpha(0));
-    });
-
-    this.tweens.add({
-      targets: startBtnGroup.visuals,
-      alpha: 1,
-      duration: 600,
-      ease: 'Cubic.easeOut',
-      delay: 200,
-    });
-
-    this.tweens.add({
-      targets: howBtnGroup.visuals,
-      alpha: 1,
-      duration: 600,
-      ease: 'Cubic.easeOut',
-      delay: 400,
+      this.tweens.add({
+        targets: group.visuals,
+        alpha: 1,
+        duration: 600,
+        ease: 'Cubic.easeOut',
+        delay: 200 + idx * 150,
+      });
     });
   }
 
@@ -394,26 +420,26 @@ export default class MenuScene extends Phaser.Scene {
     div.fillCircle(px, py - panelH / 2 + 60, 2);
 
     const controls = [
-      { key: 'W A S D', action: 'Move your character' },
-      { key: 'ARROW KEYS', action: 'Move your character' },
-      { key: 'E', action: 'Interact with NPCs and objects' },
+      { key: 'W A S D / ARROWS', action: 'Move your scholar' },
+      { key: 'E', action: 'Interact with people & clues' },
+      { key: 'TAB', action: 'Open Case File & link clues' },
       { key: 'SPACE', action: 'Advance dialogue' },
       { key: 'ESC', action: 'Close menus and dialogue' },
     ];
 
-    let cy = py - panelH / 2 + 90;
+    let cy = py - panelH / 2 + 88;
     controls.forEach(c => {
-      const keyText = this.add.text(px - 80, cy, c.key, {
+      const keyText = this.add.text(px - 110, cy, c.key, {
         fontFamily: 'Cinzel, Georgia, serif',
-        fontSize: '13px',
+        fontSize: '12px',
         color: '#C4A46C',
       }).setDepth(102);
-      const actionText = this.add.text(px + 20, cy, c.action, {
+      const actionText = this.add.text(px + 10, cy, c.action, {
         fontFamily: 'Lora, Georgia, serif',
-        fontSize: '14px',
+        fontSize: '13px',
         color: '#D4C5A9',
       }).setDepth(102);
-      cy += 28;
+      cy += 27;
     });
 
     // Separator
@@ -422,19 +448,18 @@ export default class MenuScene extends Phaser.Scene {
     sepG.lineStyle(1, 0x8B7355, 0.2);
     sepG.lineBetween(px - 140, sepY, px + 140, sepY);
 
-    const objective = this.add.text(px, sepY + 25, [
-      'Explore the village, talk to the people,',
-      'and find hidden manuscript fragments.',
-      'Complete quests to earn Heritage Points',
-      'and restore the archive.',
+    const objective = this.add.text(px, sepY + 20, [
+      'Search the village for the missing manuscript folios.',
+      'Question the villagers, find hidden evidence, and use',
+      'the Case File (TAB) to make deductive connections.',
       '',
-      'Your goal: preserve the intellectual',
-      'heritage of Kazakhstan.',
+      'Protect the 12 copyists of Abai\'s words and preserve',
+      'the intellectual dawn of Kazakhstan.',
     ].join('\n'), {
       fontFamily: 'Lora, Georgia, serif',
-      fontSize: '14px',
+      fontSize: '13px',
       color: '#A0896C',
-      lineSpacing: 5,
+      lineSpacing: 4,
       align: 'center',
       fontStyle: 'italic',
     }).setOrigin(0.5, 0).setDepth(102);

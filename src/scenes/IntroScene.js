@@ -133,13 +133,17 @@ export default class IntroScene extends Phaser.Scene {
       label.setColor('#E8D5B0');
     });
 
-    // THE ACTUAL CLICK HANDLER
-    hitArea.on('pointerdown', () => {
+    const startGame = () => {
       this.cameras.main.fadeOut(600, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => {
         this.scene.start('GameScene');
       });
-    });
+    };
+
+    // Click and keyboard triggers
+    hitArea.on('pointerdown', startGame);
+    this.input.keyboard.once('keydown-SPACE', startGame);
+    this.input.keyboard.once('keydown-ENTER', startGame);
 
     // Subtle pulse
     this.tweens.add({

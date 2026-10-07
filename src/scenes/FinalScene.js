@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { HISTORY_CARDS } from '../data/chapters.js';
 
 export default class FinalScene extends Phaser.Scene {
   constructor() {
@@ -9,6 +10,8 @@ export default class FinalScene extends Phaser.Scene {
     this.finalPoints = data.points || 0;
     this.finalRank = data.rank || 'CURIOUS RESEARCHER';
     this.finalEnding = data.ending || null;
+    this.epilogueText = data.epilogueText || '';
+    this.trust = data.trust || 50;
   }
 
   create() {
@@ -20,272 +23,245 @@ export default class FinalScene extends Phaser.Scene {
     this.createOrnamentalFrame(w, h);
     this.createAmbientParticles(w, h);
 
-    let delay = 600;
+    let delay = 300;
 
-    // Main title
-    const titleText = this.add.text(w / 2, h * 0.15, 'ARCHIVE RESTORED', {
+    // Header
+    const titleText = this.add.text(w / 2, 45, 'HERITAGE PRESERVED', {
       fontFamily: 'Cinzel, Georgia, serif',
-      fontSize: '46px',
+      fontSize: '34px',
       color: '#C4A46C',
       stroke: '#2A1506',
       strokeThickness: 3,
-      letterSpacing: 8,
-    }).setOrigin(0.5).setAlpha(0).setScale(0.8);
-
-    this.tweens.add({
-      targets: titleText,
-      alpha: 1,
-      scaleX: 1,
-      scaleY: 1,
-      duration: 1400,
-      delay: delay,
-      ease: 'Cubic.easeOut',
-    });
-
-    delay += 1100;
-
-    // Subtitle
-    const subText = this.add.text(w / 2, h * 0.27, 'You preserved more than a manuscript.', {
-      fontFamily: 'Lora, Georgia, serif',
-      fontSize: '17px',
-      color: '#D4C5A9',
-      fontStyle: 'italic',
+      letterSpacing: 6,
     }).setOrigin(0.5).setAlpha(0);
 
-    this.tweens.add({
-      targets: subText,
-      alpha: 1,
-      duration: 900,
-      delay: delay,
-    });
+    this.tweens.add({ targets: titleText, alpha: 1, duration: 800, delay });
+    delay += 500;
 
-    delay += 700;
-
-    const subText2 = this.add.text(w / 2, h * 0.33, 'You preserved a part of Kazakhstan\'s intellectual heritage.', {
-      fontFamily: 'Lora, Georgia, serif',
-      fontSize: '17px',
-      color: '#D4C5A9',
-      fontStyle: 'italic',
-    }).setOrigin(0.5).setAlpha(0);
-
-    this.tweens.add({
-      targets: subText2,
-      alpha: 1,
-      duration: 900,
-      delay: delay,
-    });
-
-    delay += 800;
-
-    // Ending-specific title and text
+    // Ending title
     if (this.finalEnding) {
-      const endingTitle = this.add.text(w / 2, h * 0.40, this.finalEnding.ending, {
+      const endingTitle = this.add.text(w / 2, 88, `ENDING: ${this.finalEnding.ending}`, {
         fontFamily: 'Cinzel, Georgia, serif',
-        fontSize: '30px',
+        fontSize: '22px',
         color: '#FFD700',
         stroke: '#2A1506',
         strokeThickness: 2,
-        letterSpacing: 4,
-      }).setOrigin(0.5).setAlpha(0).setScale(0.8);
+        letterSpacing: 3,
+      }).setOrigin(0.5).setAlpha(0);
 
-      this.tweens.add({
-        targets: endingTitle,
-        alpha: 1, scaleX: 1, scaleY: 1,
-        duration: 1000, delay: delay, ease: 'Back.easeOut',
-      });
+      this.tweens.add({ targets: endingTitle, alpha: 1, duration: 800, delay });
+      delay += 400;
 
-      delay += 500;
-
-      const endingText = this.add.text(w / 2, h * 0.47, this.finalEnding.endingText, {
+      const endingQuote = this.add.text(w / 2, 118, `"${this.finalEnding.endingText}"`, {
         fontFamily: 'Lora, Georgia, serif',
-        fontSize: '16px',
+        fontSize: '15px',
         color: '#E8D5B0',
         fontStyle: 'italic',
       }).setOrigin(0.5).setAlpha(0);
 
-      this.tweens.add({
-        targets: endingText,
-        alpha: 1,
-        duration: 800,
-        delay: delay,
-      });
-
-      delay += 400;
+      this.tweens.add({ targets: endingQuote, alpha: 1, duration: 800, delay });
+      delay += 500;
     }
 
-    delay += 1100;
+    // Epilogue Box
+    const epiBox = this.add.graphics().setAlpha(0);
+    const epiW = 700;
+    const epiH = 88;
+    const epiY = 195;
 
-    // Ornamental divider
-    const divY = h * 0.44;
-    const divG = this.add.graphics().setAlpha(0);
-    divG.lineStyle(1, 0xC4A46C, 0.3);
-    divG.lineBetween(w * 0.15, divY, w * 0.85, divY);
+    epiBox.fillStyle(0x2A1506, 0.85);
+    epiBox.fillRoundedRect(w / 2 - epiW / 2, epiY - epiH / 2, epiW, epiH, 8);
+    epiBox.lineStyle(1, 0x8B7355, 0.6);
+    epiBox.strokeRoundedRect(w / 2 - epiW / 2, epiY - epiH / 2, epiW, epiH, 8);
 
-    // Center ornament
-    divG.fillStyle(0xC4A46C, 0.4);
-    divG.fillRect(w / 2 - 8, divY - 8, 16, 16);
-    divG.lineStyle(1, 0xC4A46C, 0.5);
-    divG.strokeRect(w / 2 - 8, divY - 8, 16, 16);
-    divG.fillStyle(0xFFE8C0, 0.6);
-    divG.fillCircle(w / 2, divY, 4);
-
-    // Small diamonds on sides
-    divG.fillStyle(0xC4A46C, 0.25);
-    divG.fillRect(w * 0.15 - 6, divY - 6, 12, 12);
-    divG.fillRect(w * 0.85 - 6, divY - 6, 12, 12);
-
-    this.tweens.add({
-      targets: divG,
-      alpha: 1,
-      duration: 800,
-      delay: delay,
-    });
-
-    delay += 600;
-
-    // Heritage Points
-    const pointsLabel = this.add.text(w / 2, h * 0.52, 'HERITAGE POINTS', {
-      fontFamily: 'Cinzel, Georgia, serif',
-      fontSize: '14px',
-      color: '#A0896C',
-      letterSpacing: 4,
+    const epiText = this.add.text(w / 2, epiY, this.epilogueText, {
+      fontFamily: 'Lora, Georgia, serif',
+      fontSize: '13.5px',
+      color: '#D4C5A9',
+      align: 'center',
+      wordWrap: { width: epiW - 40 },
+      lineSpacing: 4,
     }).setOrigin(0.5).setAlpha(0);
 
-    this.tweens.add({
-      targets: pointsLabel,
-      alpha: 1,
-      duration: 500,
-      delay: delay,
-    });
+    this.tweens.add({ targets: [epiBox, epiText], alpha: 1, duration: 800, delay });
+    delay += 600;
 
-    delay += 400;
+    // Divider
+    const div = this.add.graphics().setAlpha(0);
+    div.lineStyle(1, 0xC4A46C, 0.25);
+    div.lineBetween(w * 0.15, 260, w * 0.85, 260);
+    this.tweens.add({ targets: div, alpha: 1, duration: 500, delay });
+    delay += 300;
 
-    const pointsValue = this.add.text(w / 2, h * 0.6, `${this.finalPoints}`, {
+    // Heritage points display
+    const pointsLabel = this.add.text(w / 2, 290, 'HERITAGE POINTS EARNED', {
       fontFamily: 'Cinzel, Georgia, serif',
-      fontSize: '64px',
+      fontSize: '13px',
+      color: '#A0896C',
+      letterSpacing: 3,
+    }).setOrigin(0.5).setAlpha(0);
+
+    const pointsValue = this.add.text(w / 2, 335, `${this.finalPoints}`, {
+      fontFamily: 'Cinzel, Georgia, serif',
+      fontSize: '52px',
       color: '#FFE8C0',
       stroke: '#2A1506',
       strokeThickness: 3,
-    }).setOrigin(0.5).setAlpha(0).setScale(0.4);
+    }).setOrigin(0.5).setAlpha(0).setScale(0.7);
 
-    this.tweens.add({
-      targets: pointsValue,
-      alpha: 1,
-      scaleX: 1,
-      scaleY: 1,
-      duration: 900,
-      delay: delay,
-      ease: 'Back.easeOut',
-    });
+    this.tweens.add({ targets: pointsLabel, alpha: 1, duration: 500, delay });
+    this.tweens.add({ targets: pointsValue, alpha: 1, scaleX: 1, scaleY: 1, duration: 600, delay: delay + 100, ease: 'Back.easeOut' });
+    delay += 600;
 
-    delay += 1000;
-
-    // Rank
+    // Rank Badge
     const rankColor = this.getRankColor();
-    const rankBadge = this.add.graphics().setAlpha(0);
-
     const badgeW = 280;
-    const badgeH = 44;
-    const badgeX = w / 2 - badgeW / 2;
-    const badgeY = h * 0.7;
+    const badgeH = 40;
+    const badgeY = 395;
 
+    const rankBadge = this.add.graphics().setAlpha(0);
     rankBadge.fillStyle(0x1a0a00, 0.7);
-    rankBadge.fillRoundedRect(badgeX, badgeY, badgeW, badgeH, 22);
-    rankBadge.lineStyle(1.5, rankColor, 0.7);
-    rankBadge.strokeRoundedRect(badgeX, badgeY, badgeW, badgeH, 22);
+    rankBadge.fillRoundedRect(w / 2 - badgeW / 2, badgeY - badgeH / 2, badgeW, badgeH, 20);
+    rankBadge.lineStyle(1.5, rankColor, 0.8);
+    rankBadge.strokeRoundedRect(w / 2 - badgeW / 2, badgeY - badgeH / 2, badgeW, badgeH, 20);
 
-    const rankText = this.add.text(w / 2, badgeY + badgeH / 2, this.finalRank, {
-      fontFamily: 'Cinzel, Georgia, serif',
-      fontSize: '22px',
-      color: rankColor,
-      letterSpacing: 3,
-      stroke: '#2A1506',
-      strokeThickness: 2,
-    }).setOrigin(0.5).setAlpha(0);
-
-    this.tweens.add({
-      targets: [rankBadge, rankText],
-      alpha: 1,
-      duration: 700,
-      delay: delay,
-    });
-
-    // Subtle rank badge glow
-    this.tweens.add({
-      targets: rankBadge,
-      alpha: { from: 0.7, to: 0.9 },
-      duration: 2000,
-      delay: delay + 700,
-      yoyo: true,
-      repeat: -1,
-    });
-
-    delay += 1200;
-
-    // PLAY AGAIN button
-    const btnW = 240;
-    const btnH = 50;
-    const btnX = w / 2;
-    const btnY = h * 0.86;
-
-    const btnShadow = this.add.graphics().setAlpha(0);
-    btnShadow.fillStyle(0x000000, 0.3);
-    btnShadow.fillRoundedRect(btnX - btnW / 2 + 3, btnY - btnH / 2 + 3, btnW, btnH, 8);
-
-    const btnBg = this.add.graphics().setAlpha(0);
-    btnBg.fillStyle(0x3D2B1A, 0.92);
-    btnBg.fillRoundedRect(btnX - btnW / 2, btnY - btnH / 2, btnW, btnH, 8);
-    btnBg.lineStyle(1.5, 0x8B7355, 0.7);
-    btnBg.strokeRoundedRect(btnX - btnW / 2, btnY - btnH / 2, btnW, btnH, 8);
-    btnBg.lineStyle(1, 0xC4A46C, 0.2);
-    btnBg.strokeRoundedRect(btnX - btnW / 2 + 3, btnY - btnH / 2 + 3, btnW - 6, btnH - 6, 6);
-
-    const btnText = this.add.text(btnX, btnY, 'PLAY AGAIN', {
+    const rankText = this.add.text(w / 2, badgeY, this.finalRank, {
       fontFamily: 'Cinzel, Georgia, serif',
       fontSize: '18px',
-      color: '#E8D5B0',
-      letterSpacing: 3,
+      color: rankColor,
+      letterSpacing: 2,
     }).setOrigin(0.5).setAlpha(0);
 
-    const btnDots = this.add.graphics().setAlpha(0);
-    btnDots.fillStyle(0xC4A46C, 0.5);
-    btnDots.fillCircle(btnX - btnW / 2 + 12, btnY, 4);
-    btnDots.fillCircle(btnX + btnW / 2 - 12, btnY, 4);
+    this.tweens.add({ targets: [rankBadge, rankText], alpha: 1, duration: 600, delay });
+    delay += 600;
 
-    const allBtn = [btnShadow, btnBg, btnDots, btnText];
+    // Action Buttons
+    this.createButtons(w, h, delay);
+  }
 
-    const hitArea = this.add.rectangle(btnX, btnY, btnW, btnH, 0x000000, 0.01)
-      .setInteractive({ useHandCursor: true });
+  createButtons(w, h, delay) {
+    const btnW = 260;
+    const btnH = 46;
+    const btnY1 = 475;
+    const btnY2 = 540;
 
-    this.tweens.add({
-      targets: allBtn,
-      alpha: 1,
-      duration: 700,
-      delay: delay,
+    // Button 1: Historical Context
+    this.createCustomButton(w / 2, btnY1, btnW, btnH, 'HISTORICAL CONTEXT', delay, () => {
+      this.showHistoryModal(w, h);
     });
 
-    hitArea.on('pointerover', () => {
-      btnBg.clear();
-      btnBg.fillStyle(0x5C3A1E, 0.95);
-      btnBg.fillRoundedRect(btnX - btnW / 2, btnY - btnH / 2, btnW, btnH, 8);
-      btnBg.lineStyle(2, 0xC4A46C, 0.9);
-      btnBg.strokeRoundedRect(btnX - btnW / 2, btnY - btnH / 2, btnW, btnH, 8);
-      btnText.setColor('#FFE8C0');
-    });
-    hitArea.on('pointerout', () => {
-      btnBg.clear();
-      btnBg.fillStyle(0x3D2B1A, 0.92);
-      btnBg.fillRoundedRect(btnX - btnW / 2, btnY - btnH / 2, btnW, btnH, 8);
-      btnBg.lineStyle(1.5, 0x8B7355, 0.7);
-      btnBg.strokeRoundedRect(btnX - btnW / 2, btnY - btnH / 2, btnW, btnH, 8);
-      btnText.setColor('#E8D5B0');
-    });
-    hitArea.on('pointerdown', () => {
+    // Button 2: Play Again
+    this.createCustomButton(w / 2, btnY2, btnW, btnH, 'PLAY AGAIN', delay + 200, () => {
+      try {
+        localStorage.removeItem('archives_of_alash_save');
+      } catch (e) {}
       this.cameras.main.fadeOut(600, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => {
         this.scene.start('MenuScene');
       });
     });
+  }
+
+  createCustomButton(x, y, btnW, btnH, label, delay, onClick) {
+    const bg = this.add.graphics().setAlpha(0);
+    bg.fillStyle(0x3D2B1A, 0.95);
+    bg.fillRoundedRect(x - btnW / 2, y - btnH / 2, btnW, btnH, 8);
+    bg.lineStyle(1.5, 0x8B7355, 0.7);
+    bg.strokeRoundedRect(x - btnW / 2, y - btnH / 2, btnW, btnH, 8);
+
+    const text = this.add.text(x, y, label, {
+      fontFamily: 'Cinzel, Georgia, serif',
+      fontSize: '15px',
+      color: '#E8D5B0',
+      letterSpacing: 2,
+    }).setOrigin(0.5).setAlpha(0);
+
+    const hitArea = this.add.rectangle(x, y, btnW, btnH, 0x000000, 0.01)
+      .setInteractive({ useHandCursor: true });
+
+    this.tweens.add({ targets: [bg, text], alpha: 1, duration: 600, delay });
+
+    hitArea.on('pointerover', () => {
+      bg.clear();
+      bg.fillStyle(0x5C3A1E, 0.98);
+      bg.fillRoundedRect(x - btnW / 2, y - btnH / 2, btnW, btnH, 8);
+      bg.lineStyle(2, 0xC4A46C, 0.9);
+      bg.strokeRoundedRect(x - btnW / 2, y - btnH / 2, btnW, btnH, 8);
+      text.setColor('#FFE8C0');
+    });
+
+    hitArea.on('pointerout', () => {
+      bg.clear();
+      bg.fillStyle(0x3D2B1A, 0.95);
+      bg.fillRoundedRect(x - btnW / 2, y - btnH / 2, btnW, btnH, 8);
+      bg.lineStyle(1.5, 0x8B7355, 0.7);
+      bg.strokeRoundedRect(x - btnW / 2, y - btnH / 2, btnW, btnH, 8);
+      text.setColor('#E8D5B0');
+    });
+
+    hitArea.on('pointerdown', onClick);
+  }
+
+  showHistoryModal(w, h) {
+    const modalContainer = this.add.container(0, 0).setDepth(150);
+
+    const overlay = this.add.rectangle(w / 2, h / 2, w, h, 0x000000, 0.85).setInteractive();
+    modalContainer.add(overlay);
+
+    const panelW = 680;
+    const panelH = 520;
+    const px = w / 2;
+    const py = h / 2;
+
+    const panel = this.add.graphics();
+    panel.fillStyle(0x2A1506, 0.98);
+    panel.fillRoundedRect(px - panelW / 2, py - panelH / 2, panelW, panelH, 14);
+    panel.lineStyle(2, 0xC4A46C, 0.8);
+    panel.strokeRoundedRect(px - panelW / 2, py - panelH / 2, panelW, panelH, 14);
+    modalContainer.add(panel);
+
+    const title = this.add.text(px, py - panelH / 2 + 35, '◆  HISTORICAL CHRONICLES (1904–1937)  ◆', {
+      fontFamily: 'Cinzel, Georgia, serif',
+      fontSize: '18px',
+      color: '#C4A46C',
+      letterSpacing: 2,
+    }).setOrigin(0.5);
+    modalContainer.add(title);
+
+    let cy = py - panelH / 2 + 75;
+    HISTORY_CARDS.forEach((card) => {
+      const cardTitle = this.add.text(px - panelW / 2 + 35, cy, card.title, {
+        fontFamily: 'Cinzel, Georgia, serif',
+        fontSize: '13px',
+        color: '#E8D5B0',
+        letterSpacing: 1,
+      });
+      modalContainer.add(cardTitle);
+
+      const cardBody = this.add.text(px - panelW / 2 + 35, cy + 20, card.text, {
+        fontFamily: 'Lora, Georgia, serif',
+        fontSize: '12px',
+        color: '#A0896C',
+        wordWrap: { width: panelW - 70 },
+        lineSpacing: 3,
+      });
+      modalContainer.add(cardBody);
+
+      cy += 95;
+    });
+
+    const closeBtn = this.add.text(px, py + panelH / 2 - 30, '[ CLOSE ARCHIVES ]', {
+      fontFamily: 'Cinzel, Georgia, serif',
+      fontSize: '15px',
+      color: '#C4A46C',
+      letterSpacing: 2,
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+    modalContainer.add(closeBtn);
+
+    closeBtn.on('pointerover', () => closeBtn.setColor('#FFE8C0'));
+    closeBtn.on('pointerout', () => closeBtn.setColor('#C4A46C'));
+    closeBtn.on('pointerdown', () => modalContainer.destroy());
+    overlay.on('pointerdown', () => modalContainer.destroy());
   }
 
   getRankColor() {
@@ -296,49 +272,22 @@ export default class FinalScene extends Phaser.Scene {
 
   createBackground(w, h) {
     const g = this.add.graphics();
-
     g.fillStyle(0x120808);
     g.fillRect(0, 0, w, h);
 
-    // Radial glow layers
     for (let i = 0; i < 4; i++) {
       g.fillStyle(0xC4A46C, 0.03 - i * 0.005);
       g.fillCircle(w / 2, h / 2, 140 + i * 60);
-    }
-
-    // Subtle texture
-    for (let i = 0; i < 30; i++) {
-      g.fillStyle(0xD4C5A9, Phaser.Math.FloatBetween(0.01, 0.03));
-      g.fillRect(
-        Phaser.Math.Between(0, w),
-        Phaser.Math.Between(0, h),
-        Phaser.Math.Between(30, 80),
-        1
-      );
     }
   }
 
   createOrnamentalFrame(w, h) {
     const g = this.add.graphics();
-    const m = 35;
-
+    const m = 25;
     g.lineStyle(1, 0xC4A46C, 0.15);
     g.strokeRect(m, m, w - m * 2, h - m * 2);
-
     g.lineStyle(1, 0x8B7355, 0.1);
-    g.strokeRect(m + 10, m + 10, w - (m + 10) * 2, h - (m + 10) * 2);
-
-    // Corner diamonds
-    const corners = [[m, m], [w - m, m], [m, h - m], [w - m, h - m]];
-    corners.forEach(([cx, cy]) => {
-      const size = 14;
-      g.lineStyle(1, 0xC4A46C, 0.3);
-      g.strokeRect(cx - size / 2, cy - size / 2, size, size);
-      g.fillStyle(0xC4A46C, 0.1);
-      g.fillRect(cx - size / 2 + 1, cy - size / 2 + 1, size - 2, size - 2);
-      g.fillStyle(0xC4A46C, 0.25);
-      g.fillCircle(cx, cy, 2);
-    });
+    g.strokeRect(m + 8, m + 8, w - (m + 8) * 2, h - (m + 8) * 2);
   }
 
   createAmbientParticles(w, h) {
@@ -352,18 +301,6 @@ export default class FinalScene extends Phaser.Scene {
       frequency: 350,
       quantity: 1,
       tint: 0xC4A46C,
-    }).setDepth(0);
-
-    this.add.particles(0, 0, 'particle', {
-      x: { min: 0, max: w },
-      y: { min: 0, max: h },
-      lifespan: { min: 5000, max: 10000 },
-      speed: { min: 4, max: 18 },
-      scale: { start: 0.5, end: 0 },
-      alpha: { start: 0.2, end: 0 },
-      frequency: 700,
-      quantity: 1,
-      tint: 0xFFE8C0,
     }).setDepth(0);
   }
 }
